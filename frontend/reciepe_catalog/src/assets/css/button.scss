@@ -1,0 +1,16 @@
+.button-common {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+  touch-action: manipulation;
+  user-select: none;
+}
+.button-style{
+    @extend .button-common;
+    padding: 1rem 2rem;
+    border-radius:  var(--size-xsmall-px);
+}

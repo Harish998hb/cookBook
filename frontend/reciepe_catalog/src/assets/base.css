@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
+:root{
+  --primary-clr:#F2D4D6  ;      
+  --secondary-clr:#213F99;
+  --teritary-clr:#E1B0AC;
+  --size-xsmall-px:12px;
+  --size-small-px:16px;
+  --size-large-px:20px;
+
+}
+
+body{
+  font-size: 16px;
+  font-family: 'Rubik', sans-serif;
+  background-color: var(--teritary-clr);
+  /* height: 100vh; */
+}
+
+

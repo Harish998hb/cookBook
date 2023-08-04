@@ -1,0 +1,28 @@
+.border{
+    border: 2px solid transparent;
+    &.default{
+        border: 2px solid #000;
+    }
+    &.primary{
+        border: 2px solid var(--primary-clr);
+    }
+    &.secondary{
+        border: 2px solid var(--secondary-clr);
+    }
+    &.teritary{
+        border: 2px solid var(--teritary-clr);
+    }
+}
+
+.radius-default{
+    border-radius: 16px;
+}
+.radius-small{
+    border-radius: 12px;
+}
+.radius-large{
+    border-radius: 20px;
+}
+.radius-round{
+    border-radius: 99px;
+}
