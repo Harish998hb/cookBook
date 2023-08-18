@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const Schema = mongoose.Schema; // Schema is a class and herer we are decribing about the object that we wanna create
+const Schema = mongoose.Schema; // Schema is a class and here we are decribing about the object that we wanna create
 
 const userSchema = new Schema(
   {
@@ -13,13 +13,11 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unqiue: true,
-      get:email=>email
     },
     password: {
       type: String,
       required: true,
       unqiue: false,
-      get:password=>password
     },
     phn_no: {
       type: Number,

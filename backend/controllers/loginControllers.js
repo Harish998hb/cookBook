@@ -10,12 +10,12 @@ export const createUser = async (req, res) => {
   if (user) {
     return res.json({ msg: "Entered Email has been present" });
   }
-  const encrptedPassword=await bcrypt.hash((password,10));
+  const encrptedPassword=await bcrypt.hash(password,10);
   const newUser = new UserModel({
-    email: email,
+    email,
     password: encrptedPassword,
-    phn_no: phn_no,
-    username: username,
+    phn_no,
+    username,
   });
   await newUser.save();
   return res.json({ msg: "Account has been succesfully created" });
@@ -26,6 +26,7 @@ export const createUser = async (req, res) => {
 export const verifyUser = async (req, res) => {
   let { email, password } = req.body;
   const existUser = await UserModel.find({ email });
+  console.log(existUser);
   if (!existUser) {
     res.json({ msg: "No Such User found" });
   }
@@ -35,6 +36,6 @@ export const verifyUser = async (req, res) => {
     return res.json({msg:"Entered wrong email or password"})
   }
 
-  const token=jwt.sign()
-
+  const token=jwt.sign({id:existUser._id},"secret");
+  res.json({token,userId:existUser._id})
 };
