@@ -32,15 +32,30 @@
 </template>
 
 <script setup>
+import axios from 'axios'
 import { ref } from 'vue'
 import BaseButton from '../components/baseComponents/baseButton.vue'
+// import { apiCall } from '../apiDetails/apiConfig';
+
+// import {useLoginStore} from "../stores/loginStore";
 
 const email = ref('')
 const password = ref('')
-
+// const loginStore=useLoginStore();
 // console.log(email.value, password.value);
-function checkUser(){
-  
+ async function checkUser(){
+   console.log("in check User func",email,password);
+  //  const payload={
+  //    email:email.value,
+  //    password:password.value,
+  //   }
+  //   await loginStore.validateUser(payload)
+    await axios.post("http://localhost:3007/auth/login",{email:email.value,password:password.value}).then((data)=>{
+      console.log(data);
+    }).catch((err)=>{
+      console.error(err);
+    })
+
 }
 </script>
 

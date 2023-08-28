@@ -1,6 +1,6 @@
 import { UserModel } from "../module/userModule.js";
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 // creating account
 export const createUser = async (req, res) => {
@@ -10,7 +10,7 @@ export const createUser = async (req, res) => {
   if (user) {
     return res.json({ msg: "Entered Email has been present" });
   }
-  const encrptedPassword=await bcrypt.hash(password,10);
+  const encrptedPassword = await bcrypt.hash(password, 10);
   const newUser = new UserModel({
     email,
     password: encrptedPassword,
@@ -25,17 +25,15 @@ export const createUser = async (req, res) => {
 
 export const verifyUser = async (req, res) => {
   let { email, password } = req.body;
-  const existUser = await UserModel.find({ email });
-  console.log(existUser);
+  const existUser = await UserModel.findOne({ email });
   if (!existUser) {
     res.json({ msg: "No Such User found" });
   }
-  const isValidPass= await bcrypt.compare(password,existUser.password);
-  
-  if(!isValidPass){
-    return res.json({msg:"Entered wrong email or password"})
-  }
-
-  const token=jwt.sign({id:existUser._id},"secret");
-  res.json({token,userId:existUser._id})
+  bcrypt.compare(password, existUser.password, function (err, result) {
+    if (result) {
+      const token = jwt.sign({ id: existUser._id }, "secret");
+      return res.json({ token, userId: existUser._id });
+    }
+    return res.json({ msg: "Entered wrong email or password" });
+  });
 };

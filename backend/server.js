@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { config } from "dotenv";
 import { router as loginRoute } from "./routes/login.js";
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
@@ -13,6 +14,11 @@ app.listen(3007, () => {
 
 //route
 app.use("/auth", loginRoute);
+
+// CORS Cross Orgin Resource Sharing 
+app.use(cors({
+  origin:'http://localhost:5173',
+}));
 
 // Database Connection
 const connection_string =
