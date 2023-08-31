@@ -25,7 +25,7 @@ export const createUser = async (req, res) => {
 
 export const verifyUser = async (req, res) => {
   let { email, password } = req.body;
-  const existUser = await UserModel.findOne({ email });
+  const existUser = await UserModel.findOne({ email:email });
   if (!existUser) {
     res.json({ msg: "No Such User found" });
   }
