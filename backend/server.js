@@ -25,7 +25,7 @@ app.listen(3007, () => {
 // })
 // );
 
-app.use(
+app.use(  // Always use cors before the router or any other api calls 
   cors({
     origin: "http://localhost:5173",
     credentials:true,
