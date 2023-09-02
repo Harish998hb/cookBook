@@ -7,7 +7,8 @@
   --size-xsmall-px:12px;
   --size-small-px:16px;
   --size-large-px:20px;
-
+  --cl-success:#3ACE06;
+  --cl-neg: #ff5454;
 }
 
 body{

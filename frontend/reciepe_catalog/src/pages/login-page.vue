@@ -1,6 +1,6 @@
 <template>
   <section class="login is-flex is-justify-content-center is-align-items-center">
-    <div class="login-form border radius-small p-6">
+    <div class="login-form border radius-small bg-color-cl-sec p-6">
       <h3 class="is-size-4">Login to your account</h3>
       <div class="mt-6">
         <label for="email" class="is-size-5">Email</label>
@@ -25,51 +25,45 @@
         />
       </div>
       <div class="is-flex is-justify-content-center is-align-items-center mt-6">
-        <base-button class="submit-btn"><span class="is-size-6" @click="checkUser()">Submit</span></base-button>
+        <base-button class="submit-btn"
+          ><span class="is-size-6" @click="checkUser()">Submit</span></base-button
+        >
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-// import axios from 'axios'
 import { ref } from 'vue'
 import BaseButton from '../components/baseComponents/baseButton.vue'
-import { apiCall } from '../apiDetails/apiConfig';
-import {router} from '../router/index'
-// import {router} from 'vue-router'
-// import {useLoginStore} from "../stores/loginStore";
+import { router } from '../router/index'
+import { useLoginStore } from '../stores/loginStore'
 
 const email = ref('')
 const password = ref('')
-// const loginStore=useLoginStore();
-// console.log(email.value, password.value);
- async function checkUser(){
-   console.log("in check User func",email,password);
-  //  const payload={
-  //    email:email.value,
-  //    password:password.value,
-  //   }
-  //   await loginStore.validateUser(payload)
-    await apiCall.post("auth/login",{email:email.value,password:password.value}).then((data)=>{
-      console.log(data);
-      router.push({name:'home'})
-      // ro.push({name:'home'})   
-    }).catch((err)=>{
-      console.error(err);
+const loginStore = useLoginStore()
+async function checkUser() {
+  const payload = {
+    email: email.value,
+    password: password.value
+  }
+  await loginStore
+    .validateUser(payload)
+    .then((data) => {
+      console.log(data)
+      router.push({ name: 'home' })
     })
-
+    .catch((err) => {
+      console.error(err)
+    })
 }
 </script>
 
 <style lang="scss" scoped>
 .login {
   height: 91vh;
-  // width:100vw ;
 }
 .login-form {
-  background-color: var(--secondary-clr);
-
   h3,
   label {
     color: var(--primary-clr);
@@ -77,7 +71,7 @@ const password = ref('')
   label {
     text-indent: 1rem;
   }
-  .submit-btn{
+  .submit-btn {
     cursor: pointer;
   }
 }

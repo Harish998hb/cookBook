@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 // import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import { apiCall } from '../apiDetails/apiConfig'
 
 export const useLoginStore = defineStore('loginStore', () => {
   async function validateUser(payload) {
-    axios
-      .post('http://localhost:3007/auth/login', { email: payload.email, password: payload.password })
+    apiCall
+      .post('auth/login', { email: payload.email, password: payload.password })
       .then((res) => {
         let user = res.data
         console.log(user)
@@ -15,6 +15,13 @@ export const useLoginStore = defineStore('loginStore', () => {
         console.error(err)
       })
   }
-
-  return { validateUser }
+  async function createUser(payload) {
+    await apiCall.post('auth/register', payload).then((data)=>{
+      console.log(data);
+    })
+    .catch((err)=>{
+      console.error(err);
+    })
+  }
+  return { validateUser ,createUser}
 })
