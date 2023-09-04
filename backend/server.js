@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { config } from "dotenv";
 import { router as loginRoute } from "./routes/login.js";
+import { router as receipeRoute } from "./routes/reciepes.js";
 import cors from "cors";
 import "dotenv/config.js";
 
@@ -49,6 +50,7 @@ app.use(  // Always use cors before the router or any other api calls
 
 app.use("/auth", loginRoute);
 
+app.use('/reciepe',receipeRoute);
 // Database Connection
 
 // const connection_string =

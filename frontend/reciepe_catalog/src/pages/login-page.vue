@@ -43,19 +43,21 @@ const email = ref('')
 const password = ref('')
 const loginStore = useLoginStore()
 async function checkUser() {
-  const payload = {
-    email: email.value,
-    password: password.value
+  if (email.value.trim() && password.value.trim()) {
+    const payload = {
+      email: email.value,
+      password: password.value
+    }
+    await loginStore
+      .validateUser(payload)
+      .then((data) => {
+        console.log(data)
+        router.push({ name: 'home' })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
-  await loginStore
-    .validateUser(payload)
-    .then((data) => {
-      console.log(data)
-      router.push({ name: 'home' })
-    })
-    .catch((err) => {
-      console.error(err)
-    })
 }
 </script>
 

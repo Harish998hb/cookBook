@@ -71,20 +71,36 @@ const confirmPassword = ref('')
 const phn = ref('')
 
 function createUser() {
-//   console.log(email, password, confirmPassword, username, phn)
-  const payload = {
-    email: email.value,
-    password: password.value,
-    username: username.value,
-    phn_no: phn.value
+  if (
+    email.value.trim() &&
+    password.value.trim() &&
+    confirmPassword.value.trim() &&
+    username.value.trim() &&
+    phn
+  ) {
+    if (password.value === confirmPassword.value) {
+      const payload = {
+        email: email.value,
+        password: password.value,
+        username: username.value,
+        phn_no: phn.value
+      }
+      console.log(payload)
+      loginStore
+        .createUser(payload)
+        .then(() => {
+          console.log('created sucessfully')
+          router.push({ name: 'login' })
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }else{
+      alert("Password mismatched");
+    }
+  }else{
+    alert("Please Enter the all fields")
   }
-  console.log(payload)
-    loginStore.createUser(payload).then(()=>{
-        console.log("created sucessfully");
-        router.push({name:"login"})
-    }).catch((err)=>{
-        console.log(err);
-    })
 }
 </script>
 
