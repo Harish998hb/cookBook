@@ -1,5 +1,5 @@
 import { ReciepeModel } from "../module/reciepeModule.js";
-import { ObjectId } from "mongodb";
+import { UserModel } from "../module/userModule.js";
 
 export const getDishes = async (req, res) => {
   const reciepes = await ReciepeModel.find({});
@@ -21,7 +21,9 @@ export const getSpecificDish = async (req, res) => {
 };
 
 export const createDish = async (req, res) => {
-  const { dish_name, img, ingredients, cooking_time, chef_id } = req.body;
+  try {
+    const { dish_name, img, ingredients, instructions, cooking_time, chef_id } =
+      req.body;
     const new_dish = new ReciepeModel({
       dish_name,
       img,
@@ -31,5 +33,30 @@ export const createDish = async (req, res) => {
       chef: chef_id,
     });
     await new_dish.save();
-    res.json({msg :"Dish Created successfully"})
+    res.json({ msg: "Dish Created successfully" });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const saveDish = async (req, res) => {
+  try {
+    const { userId, reciepeId } = req.body;
+    const user = await UserModel.findById(userId);
+    const receipe = await ReciepeModel.findById(reciepeId);
+    user.savedReciepe.push(receipe);
+    await user.save();
+    res.json({ "saved reciepes": user.savedReciepe });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getSavedDish = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.body.userId);
+    res.json({ savedReciepe: user.savedReciepe });
+  } catch (err) {
+    console.error(err);
+  }
 };

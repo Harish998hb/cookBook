@@ -24,8 +24,15 @@ const userSchema = new Schema(
       required: true,
       unqiue: true,
     },
+    savedReciepe: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "reciepes",
+      },
+    ],
   },
-  { timestamps: true },{getters:true}
+  { timestamps: true },
+  { getters: true }
 ); // the second param timestamp here will automatically adds extra 2 fields createdAt and updatedAt
 
 export const UserModel = mongoose.model("users", userSchema); // Here we use model to wrap up the schema and here it automatically creates a collection 'users' for us and thereby providing many methods for data manipulation
