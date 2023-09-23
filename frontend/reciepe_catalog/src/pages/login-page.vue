@@ -36,7 +36,7 @@
 <script setup>
 import { ref } from 'vue'
 import BaseButton from '../components/baseComponents/baseButton.vue'
-import { router } from '../router/index'
+// import { router } from '../router/index'
 import { useLoginStore } from '../stores/loginStore'
 
 const email = ref('')
@@ -48,15 +48,13 @@ async function checkUser() {
       email: email.value,
       password: password.value
     }
-    await loginStore
+    let data = await loginStore
       .validateUser(payload)
-      .then((data) => {
-        console.log(data)
-        router.push({ name: 'home' })
-      })
+      .then()
       .catch((err) => {
-        console.error(err)
+        console.log(err)
       })
+    console.log(data)
   }
 }
 </script>

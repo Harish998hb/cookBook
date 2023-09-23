@@ -24,4 +24,6 @@ router.get("/saved/ids", getSavedDishIds); // here the path will become like 300
 
 router.get('/id/chef',getDishChef)
 
+router.get('/:id',getSpecificDish);
+
 router.get('/edit/:id',updateDish);

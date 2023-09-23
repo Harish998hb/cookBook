@@ -10,18 +10,21 @@ export const useLoginStore = defineStore('loginStore', () => {
       .then((res) => {
         let user = res.data
         console.log(user)
+        return user
       })
       .catch((err) => {
         console.error(err)
       })
   }
   async function createUser(payload) {
-    await apiCall.post('auth/register', payload).then((data)=>{
-      console.log(data);
-    })
-    .catch((err)=>{
-      console.error(err);
-    })
+    await apiCall
+      .post('auth/register', payload)
+      .then((data) => {
+        console.log(data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
-  return { validateUser ,createUser}
+  return { validateUser, createUser }
 })

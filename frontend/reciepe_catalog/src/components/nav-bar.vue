@@ -11,6 +11,9 @@
               <RouterLink class="nav-links" to="/">Home</RouterLink>
             </li>
             <li class="nav-items py-4">
+              <RouterLink class="nav-links" to="/create_reciepe">Create Reciepe</RouterLink>
+            </li>
+            <li class="nav-items py-4">
               <RouterLink class="nav-links" to="/login">Login</RouterLink>
             </li>
             <li class="nav-items py-4">

@@ -5,22 +5,27 @@ import { UserModel } from "../module/userModule.js";
 
 export const getDishes = async (req, res) => {
   const reciepes = await ReciepeModel.find({});
+  console.log(typeof reciepes);
   if (reciepes) {
     return res.json(reciepes);
   } else {
-    res.json({ msg: "Cant fetch the Data" });
+    res.json({ msg: "Can,t fetch the Data" });
   }
 };
 
-// To get a specific dish 
+// To get a specific dish
 
 export const getSpecificDish = async (req, res) => {
-  const { reciepeId } = req.body;
-  const reciepe = await ReciepeModel.findById({ _id: reciepeId });
-  if (!reciepe) {
-    return res.json({ msg: "No such receipe available" });
-  } else {
-    return res.json(reciepe);
+  const { id } = req.params;
+  try {
+    const reciepe = await ReciepeModel.findById(id);
+    if (!reciepe) {
+      return res.json({ msg: "No such receipe available" });
+    } else {
+      return res.json(reciepe);
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -94,7 +99,7 @@ export const getSavedDish = async (req, res) => {
   }
 };
 
-// To get the Chef of the specific dish 
+// To get the Chef of the specific dish
 
 export const getDishChef = async (req, res) => {
   try {
@@ -114,12 +119,13 @@ export const updateDish = async (req, res) => {
   try {
     console.log(req.params.id);
     const newValue = req.body.changes;
-    const reciepe = await ReciepeModel.findById(req.body.reciepeId);
-    const userId = (req.body.userId);
+    const reciepe = await ReciepeModel.findById(req.params.id);
+    const userId = req.body.userId;
     console.log(userId, reciepe.chef);
-    if (userId == reciepe.chef) {   //  Condition to check whether the chef is same as the current user  
+    if (userId == reciepe.chef) {
+      //  Condition to check whether the chef is same as the current user
       const result = await ReciepeModel.findOneAndUpdate(
-        { _id: req.body.reciepeId },
+        { _id: req.params.id },
         newValue
       );
       res.json({ msg: "Succesfully updated", result: result });
