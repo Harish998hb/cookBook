@@ -36,7 +36,8 @@
 <script setup>
 import { ref } from 'vue'
 import BaseButton from '../components/baseComponents/baseButton.vue'
-// import { router } from '../router/index'
+import VueCookies from 'vue-cookies'
+import { router } from '../router/index'
 import { useLoginStore } from '../stores/loginStore'
 
 const email = ref('')
@@ -54,7 +55,9 @@ async function checkUser() {
       .catch((err) => {
         console.log(err)
       })
-    console.log(data)
+    VueCookies.set('token', data.token, 7)
+    VueCookies.set('id', data.userId, 7) // here the third params 7 represents the expiry period
+    router.push({name:'home'})
   }
 }
 </script>

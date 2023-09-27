@@ -5,7 +5,7 @@ import { apiCall } from '../apiDetails/apiConfig'
 
 export const useLoginStore = defineStore('loginStore', () => {
   async function validateUser(payload) {
-    apiCall
+    return apiCall
       .post('auth/login', { email: payload.email, password: payload.password })
       .then((res) => {
         let user = res.data
