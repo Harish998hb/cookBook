@@ -22,8 +22,8 @@ router.get("/saved", getSavedDish); // here the path will become like 3000/recie
 
 router.get("/saved/ids", getSavedDishIds); // here the path will become like 3000/reciepe/saved_ids
 
-router.get('/id/chef',getDishChef)
+router.get('/:id/chef',getDishChef)
 
 router.get('/:id',getSpecificDish);
 
-router.get('/edit/:id',updateDish);
+router.put('/edit/:id',updateDish);

@@ -103,11 +103,12 @@ export const getSavedDish = async (req, res) => {
 
 export const getDishChef = async (req, res) => {
   try {
-    const { reciepeId } = req.body;
-    const receipe = await ReciepeModel.findById(reciepeId);
+    const  {id}  = req.params;
+    const receipe = await ReciepeModel.findById(id);
     const chefId = receipe.chef;
     const chef = await UserModel.findById(chefId);
-    res.json({ chef_name: chef.username });
+    const chef_name=chef.username
+    res.json(chef_name);
   } catch (err) {
     console.error(err);
   }
@@ -117,7 +118,6 @@ export const getDishChef = async (req, res) => {
 
 export const updateDish = async (req, res) => {
   try {
-    console.log(req.params.id);
     const newValue = req.body.changes;
     const reciepe = await ReciepeModel.findById(req.params.id);
     const userId = req.body.userId;

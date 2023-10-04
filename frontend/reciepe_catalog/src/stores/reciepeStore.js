@@ -7,11 +7,29 @@ export const useReciepeStore = defineStore('reciepeStore', () => {
   async function getReciepes() {
     try {
       const response = await apiCall.get('reciepe/')
-      reciepes.value = response.data;
-      triggerRef(reciepes);
-      return response.data;
+      reciepes.value = response.data
+      triggerRef(reciepes)
+      return response.data
     } catch (err) {
       console.error(err)
+    }
+  }
+  async function getReciepe(param) {
+    try {
+      const response = await apiCall.get(`reciepe/${param}`)
+      return response.data
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  async function getDishChef(recipeId) {
+    try {
+      const response = await apiCall.get(`reciepe/${recipeId}/chef`)
+      console.log(response.data)
+      return response.data
+    } catch (err) {
+      console.log(err)
     }
   }
   // async function getReciepes() {
@@ -29,5 +47,18 @@ export const useReciepeStore = defineStore('reciepeStore', () => {
   //     return await data
   //   }
   // }
-  return { getReciepes }
+
+  // Create Reciepe
+  async function createDish(payload) {
+    try {
+      const response = await apiCall.post('reciepe/new', payload)
+      if (response.status) {
+        console.log('Created Successfully')
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  return { getReciepes, createDish, getReciepe, getDishChef }
 })

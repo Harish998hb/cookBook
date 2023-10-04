@@ -3,6 +3,8 @@
 import { defineStore } from 'pinia'
 import { apiCall } from '../apiDetails/apiConfig'
 
+import VueCookies from 'vue-cookies'
+
 export const useLoginStore = defineStore('loginStore', () => {
   async function validateUser(payload) {
     return apiCall
@@ -26,5 +28,11 @@ export const useLoginStore = defineStore('loginStore', () => {
         console.error(err)
       })
   }
-  return { validateUser, createUser }
+  function isAuth() {
+    const token = VueCookies.get('token')
+    console.log(token)
+    if (token) return true
+    else return false
+  }
+  return { validateUser, createUser ,isAuth}
 })

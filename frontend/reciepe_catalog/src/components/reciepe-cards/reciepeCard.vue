@@ -1,11 +1,16 @@
 <template>
-  <div class="reciepe-card">
+  <div class="reciepe-card bg-color-white" style="cursor: pointer;">
       <div class="card-head">
-        <img :src="props.reciepe.img" alt="Recipe Image" />
+        <figure class="">
+          <img :src="props.reciepe.img" alt="Recipe Image" class="image  radius-default"/>
+        </figure>
       </div>
       <div class="card-desc">
-        <h3 class="is-size-4">{{ props.reciepe.dish_name }}</h3>
+        <h3 class="is-size-3 color-tx-sec">{{ props.reciepe.dish_name }}</h3>
         <p class="is-size-5">{{ props.reciepe.description }}</p>
+      </div>
+      <div class="is-flex is-justify-content-right is- mt-3" >
+        <p class="has-text-link	">View more</p>
       </div>
   </div>
 </template>
@@ -19,4 +24,9 @@ const props = defineProps({
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.image{
+  height: 20rem;
+
+}
+</style>

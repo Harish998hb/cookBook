@@ -1,8 +1,9 @@
 <template>
   <button
-    :disabled="disabled"
+    :disabled="props.disabled"
     class="button-style is-relative"
     type="button"
+    :class="disabled?'disabled':null"
   >
     <span v-if="$slots.icon" class="">
       <slot name="icon"></slot>
@@ -19,4 +20,11 @@ const props = defineProps({
   }
 })
 </script>
+<style>
+.disabled{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+</style>
  

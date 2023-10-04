@@ -55,11 +55,14 @@ async function checkUser() {
       .catch((err) => {
         console.log(err)
       })
-    VueCookies.set('token', data.token, 7)
-    VueCookies.set('id', data.userId, 7) // here the third params 7 represents the expiry period
-    router.push({name:'home'})
+    VueCookies.set('token', data.token, 60 * 60 * 24 * 7)
+    VueCookies.set('id', data.userId, 60 * 60 * 24 * 7) // here the third params  represents the expiry period in ms
+    // console.log(this.$cookies.get('token'));
+    router.push({ name: 'home' })
   }
 }
+
+console.log(loginStore.isAuth())
 </script>
 
 <style lang="scss" scoped>
