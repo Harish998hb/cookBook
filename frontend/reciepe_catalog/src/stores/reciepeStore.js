@@ -32,6 +32,26 @@ export const useReciepeStore = defineStore('reciepeStore', () => {
       console.log(err)
     }
   }
+
+  async function editReciepe(recipeId, payload, userId) {
+    try {
+      const response = await apiCall.put(`reciepe/edit/${recipeId}/${userId}`, payload)
+      console.log(response)
+      return response.status
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  async function deleteReciepe(recipeId, userId) {
+    try {
+      const response = await apiCall.delete(`reciepe/delete/${recipeId}/${userId}`)
+      console.log(response)
+      return response.status
+    } catch (err) {
+      console.error(err)
+    }
+  }
   // async function getReciepes() {
   //   const data = apiCall
   //     .get('reciepe/')
@@ -52,13 +72,11 @@ export const useReciepeStore = defineStore('reciepeStore', () => {
   async function createDish(payload) {
     try {
       const response = await apiCall.post('reciepe/new', payload)
-      if (response.status) {
-        console.log('Created Successfully')
-      }
+      return response.status;
     } catch (err) {
       console.error(err)
     }
   }
 
-  return { getReciepes, createDish, getReciepe, getDishChef }
+  return { getReciepes, createDish, getReciepe, getDishChef, editReciepe, deleteReciepe }
 })

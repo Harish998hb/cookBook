@@ -1,11 +1,13 @@
 <template>
   <section class="container new-reciepe">
-    <h3 class="is-size-2 mt-6 color-tx-sec has-text-weight-semibold">Create Your Own Reciepe</h3>
+    <h3 class="is-size-2 mt-6 color-tx-sec has-text-weight-semibold">
+      {{ formState + ' Your Own Reciepe' }}
+    </h3>
     <p class="my-4 is-size-5">
       There is no stop for you to be a chef. Fuse yor cooking skills and your creativity to become a
       aspiring chef .Feel free to share your reciepe below.
     </p>
-    <div class="is-flex is-justify-content-center" style="height: 80vh">
+    <div class="is-flex is-justify-content-center">
       <form action="" style="width: 60%" @submit.prevent="">
         <div class="mt-4">
           <label for="reciepe-name" class="is-size-5">Reciepe Name</label>
@@ -20,21 +22,22 @@
         </div>
         <div class="mt-4">
           <label for="description" class="is-size-5">Description</label>
-          <input
-            class="input is-rounded"
+          <textarea
+            class="input radius-small"
+            style="height: 10rem"
             placeholder="Description"
             type="text"
             name="description"
             id="description"
             v-model="description"
-          />
+          ></textarea>
         </div>
         <div class="mt-4">
           <label for="cooking-time" class="is-size-5">Cooking Time </label>
           <input
             class="input is-rounded"
             placeholder="Cooking Time"
-            type="text"
+            type="number"
             name="cooking-time"
             id="cooking-time"
             v-model="cookingTime"
@@ -44,7 +47,8 @@
         <div class="mt-4">
           <label for="instructions" class="is-size-5">Instructions</label>
           <textarea
-            class="input is-rounded"
+            class="input radius-small"
+            style="height: 10rem"
             placeholder="Instruction"
             type="text"
             name="instructions"
@@ -105,9 +109,9 @@
         <div class="is-flex is-justify-content-center">
           <button
             class="radius-default bg-color-tx-sec color-white is-size-5 my-4 px-4 py-4"
-            @click="createRecipe()"
+            @click="formState === 'Edit' ? editRecipe() : createRecipe()"
           >
-            Create Reciepe
+            {{ formState + ' Reciepe' }}
           </button>
         </div>
       </form>
@@ -117,24 +121,25 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRoute} from 'vue-router'
+import { useRouter } from 'vue-router'
 
+import Toastify from 'toastify-js'
 import VueCookies from 'vue-cookies'
 import { useReciepeStore } from '../stores/reciepeStore'
 
-const route = useRoute();
-const reciepeName = ref(''),
-  exisitReciepe=ref(route.params.reciepe),
-  instructions = ref(''),
-  cookingTime = ref(''),
-  description = ref(''),
-  img = ref(''),
+const router = useRouter()
+const exisitReciepe = JSON.parse(localStorage.getItem('selectedReciepe'))
+const reciepeName = ref(exisitReciepe?.dish_name || ''),
+  instructions = ref(exisitReciepe?.instructions || ''),
+  cookingTime = ref(exisitReciepe?.cooking_time || 0),
+  description = ref(exisitReciepe?.description || ''),
+  img = ref(exisitReciepe?.img || ''),
   ingredient = ref(''),
-  ingredients = ref([]),
-  reciepeStore = useReciepeStore()
+  ingredients = ref(exisitReciepe?.ingredients || []),
+  reciepeStore = useReciepeStore(),
+  formState = ref(exisitReciepe ? 'Edit' : 'Create')
 
-const userId = VueCookies.get('id')|| null;
-// const userId = VueCookies.get('id')
+const userId = VueCookies.get('id') || null
 
 function addIngridents() {
   if (ingredient.value) {
@@ -142,29 +147,53 @@ function addIngridents() {
     ingredient.value = ''
   }
 }
-// onBeforeRouteEnter
-
 
 function removeIngrident(index) {
   ingredients.value.splice(index, 1)
 }
 
-async function createRecipe() {
-  if(userId){
-    let payload = {
-      dish_name: reciepeName.value,
-      img: img.value,
-      ingredients: ingredients.value,
-      instructions: instructions.value,
-      description: description.value,
-      cooking_time: cookingTime.value,
-      chef_id: userId
-    }
-    let newReciepe= await reciepeStore.createDish(payload);
-    console.log(newReciepe);
-  }else {
-    console.log("no userId ");
+function createPayload() {
+  return {
+    dish_name: reciepeName.value,
+    img: img.value,
+    ingredients: ingredients.value,
+    instructions: instructions.value,
+    description: description.value,
+    cooking_time: cookingTime.value,
+    chef_id: userId
   }
 }
-console.log(route.meta)
+async function createRecipe() {
+  if (userId) {
+    let payload = createPayload()
+    let newReciepeResponse = await reciepeStore.createDish(payload)
+    console.log(newReciepeResponse)
+    if (newReciepeResponse === 200) {
+      Toastify({
+        text: 'Your Reciepe has been created ',
+        duration: 3000,
+        gravity: 'top',
+        position: 'center'
+      }).showToast()
+      router.push({ name: 'home' })
+    }
+  }
+}
+function deleteLocal() {
+  localStorage.removeItem('selectedReciepe')
+}
+
+// Function for Edit reciepe
+async function editRecipe() {
+  let payload = createPayload()
+  let resCode = await reciepeStore.editReciepe(exisitReciepe._id, payload, userId)
+  Toastify({
+    text: 'Your reciepe has been changed',
+    duration: 4000,
+    gravity: 'top',
+    position: 'center'
+  }).showToast()
+  deleteLocal()
+  if (resCode == 200) router.push({ name: 'home' })
+}
 </script>

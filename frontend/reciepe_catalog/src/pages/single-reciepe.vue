@@ -58,7 +58,9 @@ import { useRouter, useRoute } from 'vue-router'
 import { useReciepeStore } from '../stores/reciepeStore.js'
 
 import BaseButton from '../components/baseComponents/baseButton.vue'
+import Toastify from 'toastify-js'
 import VueCookies from 'vue-cookies'
+
 // import router from '../router'
 
 const router = useRouter(),
@@ -74,20 +76,33 @@ const id = route.params.id,
 onMounted(async () => {
   reciepe.value = await reciepeStore.getReciepe(id)
   chef_name.value = await fetchChefName()
-  console.log(reciepe.value.chef)
+  console.log(reciepe.value._id)
   console.log(userId)
   console.log(reciepe.value.chef == userId)
 })
 async function fetchChefName() {
   return await reciepeStore.getDishChef(id)
 }
-console.log(VueCookies.get('userId'))
+console.log(VueCookies.get('id'))
 
 function editReciepe() {
-  console.log('in the edit')
-  router.push({ name: 'create_reciepe', state:  reciepe.value  })
+  console.log(reciepe.value)
+  localStorage.setItem('selectedReciepe', JSON.stringify(reciepe.value))
+  router.push({ name: 'create_reciepe' })
 }
-function deleteReciepe() {}
+async function deleteReciepe() {
+  let delRespose = await reciepeStore.deleteReciepe(reciepe.value._id, userId)
+  console.log(delRespose);
+  if (delRespose === 200) {
+    Toastify({
+      text: 'Your reciepe has been deleted',
+      duration: 4000,
+      gravity: 'top',
+      position: 'center'
+    }).showToast()
+    router.push({ name: 'home' })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

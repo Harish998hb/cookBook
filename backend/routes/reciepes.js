@@ -7,7 +7,8 @@ import {
   getSavedDishIds,
   getSavedDish,
   getDishChef,
-  updateDish
+  updateDish,
+  deleteDish
 } from "../controllers/reciepesController.js";
 
 export const router = express.Router();
@@ -26,4 +27,6 @@ router.get('/:id/chef',getDishChef)
 
 router.get('/:id',getSpecificDish);
 
-router.put('/edit/:id',updateDish);
+router.put('/edit/:id/:userId',updateDish);
+
+router.delete('/delete/:id/:userId',deleteDish);

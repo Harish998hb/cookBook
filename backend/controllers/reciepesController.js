@@ -53,6 +53,7 @@ export const createDish = async (req, res) => {
     });
     await new_dish.save();
     res.json({ msg: "Dish Created successfully" });
+    return res;
   } catch (err) {
     console.error(err);
   }
@@ -103,11 +104,11 @@ export const getSavedDish = async (req, res) => {
 
 export const getDishChef = async (req, res) => {
   try {
-    const  {id}  = req.params;
+    const { id } = req.params;
     const receipe = await ReciepeModel.findById(id);
     const chefId = receipe.chef;
     const chef = await UserModel.findById(chefId);
-    const chef_name=chef.username
+    const chef_name = chef.username;
     res.json(chef_name);
   } catch (err) {
     console.error(err);
@@ -118,10 +119,9 @@ export const getDishChef = async (req, res) => {
 
 export const updateDish = async (req, res) => {
   try {
-    const newValue = req.body.changes;
+    const newValue = req.body;
     const reciepe = await ReciepeModel.findById(req.params.id);
-    const userId = req.body.userId;
-    console.log(userId, reciepe.chef);
+    const userId = req.params.userId;
     if (userId == reciepe.chef) {
       //  Condition to check whether the chef is same as the current user
       const result = await ReciepeModel.findOneAndUpdate(
@@ -129,8 +129,24 @@ export const updateDish = async (req, res) => {
         newValue
       );
       res.json({ msg: "Succesfully updated", result: result });
+      return res;
     } else {
       res.json({ msg: "You are not an authorized user to change the dish" });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// Deleting a dish that can only be done by the chef only
+export const deleteDish = async (req, res) => {
+  try {
+    const { id, userId } = req.params;
+    const receipe = await ReciepeModel.findById(id);
+    console.log(userId.toString() == receipe.chef);
+    if (userId.toString() == receipe.chef) {
+      const result = await ReciepeModel.findByIdAndDelete(id);
+      return res;
     }
   } catch (err) {
     console.error(err);

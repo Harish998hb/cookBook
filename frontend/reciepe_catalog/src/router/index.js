@@ -32,7 +32,6 @@ export const router = createRouter({
       component: CreateReciepe,
       meta:{
         auth:true,
-        state:true,
       },
       props:true,
     },
@@ -55,9 +54,6 @@ export const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isAuthenticated = isAuth()
   console.log(isAuthenticated)
-  if(to.meta.state){
-    to.meta.data=to.params;
-  }
   if (!isAuthenticated && 'auth' in to.meta && to.meta.auth) {
     next('/login')
   } else if (isAuthenticated && 'auth' in to.meta && !to.meta.auth) {
