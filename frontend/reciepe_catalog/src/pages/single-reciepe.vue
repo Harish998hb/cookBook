@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useReciepeStore } from '../stores/reciepeStore.js'
 
@@ -70,15 +70,16 @@ const reciepe = ref({})
 const id = route.params.id,
   chef_name = ref(''),
   userId = VueCookies.get('id')
-// instructions=computed(()=>{
-//     return reciepe.value.instructions.split('.');
-// })
+
 onMounted(async () => {
   reciepe.value = await reciepeStore.getReciepe(id)
   chef_name.value = await fetchChefName()
   console.log(reciepe.value._id)
   console.log(userId)
   console.log(reciepe.value.chef == userId)
+})
+onUnmounted(()=>{
+  localStorage.clear();
 })
 async function fetchChefName() {
   return await reciepeStore.getDishChef(id)

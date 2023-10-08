@@ -17,7 +17,7 @@
             type="text"
             name="reciepe-name"
             id="reciepe-name"
-            v-model="reciepeName"
+            v-model.trim="reciepeName"
           />
         </div>
         <div class="mt-4">
@@ -29,7 +29,7 @@
             type="text"
             name="description"
             id="description"
-            v-model="description"
+            v-model.trim="description"
           ></textarea>
         </div>
         <div class="mt-4">
@@ -40,7 +40,7 @@
             type="number"
             name="cooking-time"
             id="cooking-time"
-            v-model="cookingTime"
+            v-model.trim="cookingTime"
           />
           <span> In mins</span>
         </div>
@@ -53,7 +53,7 @@
             type="text"
             name="instructions"
             id="instructions"
-            v-model="instructions"
+            v-model.trim="instructions"
           ></textarea>
         </div>
         <div class="mt-4 is-flex is-justify-content-space-between is-align-items-end">
@@ -65,7 +65,7 @@
               type="text"
               name="ingredient"
               id="ingredient"
-              v-model="ingredient"
+              v-model.trim="ingredient"
             />
           </div>
           <div>
@@ -103,7 +103,7 @@
             type="text"
             name="image"
             id="image"
-            v-model="img"
+            v-model.trim="img"
           />
         </div>
         <div class="is-flex is-justify-content-center">
@@ -163,19 +163,39 @@ function createPayload() {
     chef_id: userId
   }
 }
+function allEntered() {
+  return (
+    reciepeName.value &&
+    ingredients.value &&
+    cookingTime.value &&
+    description.value &&
+    img.value &&
+    instructions.value
+  )
+}
+
 async function createRecipe() {
   if (userId) {
-    let payload = createPayload()
-    let newReciepeResponse = await reciepeStore.createDish(payload)
-    console.log(newReciepeResponse)
-    if (newReciepeResponse === 200) {
+    if (allEntered) {
+      let payload = createPayload()
+      let newReciepeResponse = await reciepeStore.createDish(payload)
+      console.log(newReciepeResponse)
+      if (newReciepeResponse === 200) {
+        Toastify({
+          text: 'Your Reciepe has been created ',
+          duration: 3000,
+          gravity: 'top',
+          position: 'center'
+        }).showToast()
+        router.push({ name: 'home' })
+      }
+    } else {
       Toastify({
-        text: 'Your Reciepe has been created ',
+        text: 'Enter all the fields ',
         duration: 3000,
         gravity: 'top',
         position: 'center'
       }).showToast()
-      router.push({ name: 'home' })
     }
   }
 }

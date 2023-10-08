@@ -11,13 +11,29 @@
               <RouterLink class="nav-links" to="/">Home</RouterLink>
             </li>
             <li class="nav-items py-4">
-              <RouterLink class="nav-links" to="/create_reciepe">Create Reciepe</RouterLink>
+              <RouterLink class="nav-links" v-if="token" to="/create_reciepe"
+                >Create Reciepe</RouterLink
+              >
             </li>
             <li class="nav-items py-4">
-              <RouterLink class="nav-links" to="/login">Login</RouterLink>
+              <RouterLink v-if="!token" class="nav-links" to="/login">Login</RouterLink>
+              <p
+                class="nav-links"
+                style="cursor: pointer"
+                v-else
+                @click="
+                  () => {
+                    $cookies.remove('token')
+                    $cookies.remove('id')
+                    $router.push({ name: 'home' })
+                  }
+                "
+              >
+                Log Out
+              </p>
             </li>
             <li class="nav-items py-4">
-              <RouterLink class="nav-links" to="/register">Sign Up</RouterLink>
+              <RouterLink v-if="!token" class="nav-links" to="/register">Sign Up</RouterLink>
             </li>
           </ul>
         </div>
@@ -28,17 +44,23 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
+import { ref, watch } from 'vue'
+
+import VueCookies from 'vue-cookies'
+
+const token = ref(VueCookies.get('token') || null)
+
+watch(
+  () => token.value,
+  () => location.reload()
+)
 </script>
 <style scoped lang="scss">
-.navigation{
-    background-color: var(--primary-clr);
+.navigation {
+  background-color: var(--primary-clr);
 }
-.nav-links{
-    padding-right: 2rem;
-    color: var(--secondary-clr);
+.nav-links {
+  padding-right: 2rem;
+  color: var(--secondary-clr);
 }
-
-// .nav-links:not(.nav-links:last-child){
-//     padding-right: 2rem;
-// }
 </style>

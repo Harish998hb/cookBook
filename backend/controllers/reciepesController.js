@@ -5,7 +5,6 @@ import { UserModel } from "../module/userModule.js";
 
 export const getDishes = async (req, res) => {
   const reciepes = await ReciepeModel.find({});
-  console.log(typeof reciepes);
   if (reciepes) {
     return res.json(reciepes);
   } else {
@@ -25,7 +24,7 @@ export const getSpecificDish = async (req, res) => {
       return res.json(reciepe);
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -66,9 +65,21 @@ export const saveDish = async (req, res) => {
     const { userId, reciepeId } = req.body;
     const user = await UserModel.findById(userId);
     const receipe = await ReciepeModel.findById(reciepeId);
-    user.savedReciepe.push(receipe);
-    await user.save();
-    res.json({ "saved reciepes": user.savedReciepe });
+    // Here we are checking whether there the same reciepe is in savedReciepe list
+    const ifExists = user.savedReciepe.find(
+      (record) => record._id == reciepeId
+    );
+    if (!ifExists) {
+      user.savedReciepe.push(receipe);
+      await user.save();
+      res.json({ "saved reciepes": user.savedReciepe });
+    } else {
+      user.savedReciepe = user.savedReciepe.filter(
+        (records) => records._id != reciepeId
+      );
+      await user.save();
+      res.json({ "saved reciepes": user.savedReciepe });
+    }
   } catch (err) {
     console.error(err);
   }
@@ -78,8 +89,11 @@ export const saveDish = async (req, res) => {
 
 export const getSavedDishIds = async (req, res) => {
   try {
-    const user = await UserModel.findById(req.body.userId);
-    res.json({ savedReciepe: user?.savedReciepe });
+    const user = await UserModel.findById(req.params.id);
+    // res.json({ savedReciepeIds: user?.savedReciepe });
+    const savedReciepeIds=user.savedReciepe.map((item)=>item._id);
+    console.log(savedReciepeIds);
+    return res.json(savedReciepeIds)
   } catch (err) {
     console.error(err);
   }
@@ -87,14 +101,16 @@ export const getSavedDishIds = async (req, res) => {
 
 // To get the Saved dishes of a specific user
 
-export const getSavedDish = async (req, res) => {
+export const getSavedDishes = async (req, res) => {
   try {
-    const userId = req.body.userId;
+    const userId = req.params.id;
     const user = await UserModel.findById(userId);
     const savedReciepes = await ReciepeModel.find({
       _id: { $in: user?.savedReciepe },
     });
-    res.json({ saved_dishes: savedReciepes });
+    console.log(savedReciepes);
+    // res.json({ saved_dishes: savedReciepes });
+    return res.json(savedReciepes);
   } catch (err) {
     console.error(err);
   }
@@ -143,7 +159,7 @@ export const deleteDish = async (req, res) => {
   try {
     const { id, userId } = req.params;
     const receipe = await ReciepeModel.findById(id);
-    console.log(userId.toString() == receipe.chef);
+    // console.log(userId.toString() == receipe.chef);
     if (userId.toString() == receipe.chef) {
       const result = await ReciepeModel.findByIdAndDelete(id);
       return res;

@@ -5,7 +5,7 @@ import {
   createDish,
   saveDish,
   getSavedDishIds,
-  getSavedDish,
+  getSavedDishes,
   getDishChef,
   updateDish,
   deleteDish
@@ -19,9 +19,9 @@ router.post("/new", createDish); // here the path will become like 3000/reciepe/
 
 router.put("/", saveDish); // here the path will become like 3000/reciepe/
 
-router.get("/saved", getSavedDish); // here the path will become like 3000/reciepe/saved_ids
+router.get("/saved/:id", getSavedDishes); // here the path will become like 3000/reciepe/saved_ids
 
-router.get("/saved/ids", getSavedDishIds); // here the path will become like 3000/reciepe/saved_ids
+router.get("/saved_ids/:id", getSavedDishIds); // here the path will become like 3000/reciepe/saved_ids
 
 router.get('/:id/chef',getDishChef)
 

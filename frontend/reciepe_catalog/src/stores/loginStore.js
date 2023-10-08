@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-// import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { apiCall } from '../apiDetails/apiConfig'
 
@@ -11,7 +9,6 @@ export const useLoginStore = defineStore('loginStore', () => {
       .post('auth/login', { email: payload.email, password: payload.password })
       .then((res) => {
         let user = res.data
-        console.log(user)
         return user
       })
       .catch((err) => {
@@ -30,9 +27,9 @@ export const useLoginStore = defineStore('loginStore', () => {
   }
   function isAuth() {
     const token = VueCookies.get('token')
-    console.log(token)
     if (token) return true
     else return false
   }
-  return { validateUser, createUser ,isAuth}
+
+  return { validateUser, createUser, isAuth }
 })

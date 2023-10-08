@@ -25,7 +25,7 @@ export const createUser = async (req, res) => {
 
 export const verifyUser = async (req, res) => {
   let { email, password } = req.body;
-  const existUser = await UserModel.findOne({ email:email });
+  const existUser = await UserModel.findOne({ email: email });
   if (!existUser) {
     res.json({ msg: "No Such User found" });
   }
@@ -36,4 +36,19 @@ export const verifyUser = async (req, res) => {
     }
     return res.json({ msg: "Entered wrong email or password" });
   });
+};
+
+// Fetch User details
+
+export const userDetails = async (req, res) => {
+  let { id } = req.params;
+  let user = await UserModel.findById(id);
+  let dataNeed={
+    username:user.username,
+    email:user.email,
+    phn_no:user.phn_no,
+    savedReciepe:user.savedReciepe,
+  }
+  if (user) return res.json(dataNeed)
+  else res.json({msg:"Error"})
 };
