@@ -5,6 +5,7 @@ import Home from '../pages/home-page.vue'
 import Login from '../pages/login-page.vue'
 import Register from '../pages/register-page.vue'
 import CreateReciepe from '../pages/new-reciepe.vue'
+import SavedReciepe from '../pages/saved-reciepes.vue'
 import SingleReciepe from '../pages/single-reciepe.vue'
 
 function isAuth() {
@@ -30,6 +31,15 @@ export const router = createRouter({
       path: '/create_reciepe',
       name: 'create_reciepe',
       component: CreateReciepe,
+      meta:{
+        auth:true,
+      },
+      props:true,
+    },
+    {
+      path: '/saved_reciepe',
+      name: 'saved_reciepe',
+      component: SavedReciepe,
       meta:{
         auth:true,
       },

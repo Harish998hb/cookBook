@@ -12,6 +12,7 @@
               v-for="(reciepe, i) in reciepes"
               :reciepe="reciepe"
               :key="i"
+              :savedDishesId="savedReciepesIds"
               @openReciepe="openFunc(reciepe)"
               @likeIndi="isLiked(reciepe)"
             >
@@ -53,9 +54,9 @@ onMounted(async () => {
   // let like=likeNotify();
 })
 
-function isLiked(reciepe) {
-  console.log(savedReciepesIds.value.includes(reciepe._id))
-  return savedReciepesIds.value.includes(reciepe._id)
+async function isLiked(userId) {
+  console.log("parent");
+  savedReciepesIds.value = await userStore.fetchSavedDishesId(userId)
 }
 async function fetchData() {
   reciepes.value = await reciepeStore.getReciepes()

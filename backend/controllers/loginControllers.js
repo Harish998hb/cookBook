@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 
 // creating account
 export const createUser = async (req, res) => {
+  console.log(req.body);
   let { email, password, phn_no, username } = req.body;
   const user = await UserModel.findOne({ email: email });
   console.log(user);
@@ -43,12 +44,12 @@ export const verifyUser = async (req, res) => {
 export const userDetails = async (req, res) => {
   let { id } = req.params;
   let user = await UserModel.findById(id);
-  let dataNeed={
-    username:user.username,
-    email:user.email,
-    phn_no:user.phn_no,
-    savedReciepe:user.savedReciepe,
-  }
-  if (user) return res.json(dataNeed)
-  else res.json({msg:"Error"})
+  let dataNeed = {
+    username: user.username,
+    email: user.email,
+    phn_no: user.phn_no,
+    savedReciepe: user.savedReciepe,
+  };
+  if (user) return res.json(dataNeed);
+  else res.json({ msg: "Error" });
 };

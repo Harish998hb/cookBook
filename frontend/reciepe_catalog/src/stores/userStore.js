@@ -17,7 +17,6 @@ export const useUserStore = defineStore('userStore', () => {
   async function fetchSavedDishes(userId) {
     try {
       let saved_dishes = await apiCall.get(`reciepe/saved/${userId}`)
-      console.log(saved_dishes)
       return saved_dishes.data
     } catch (err) {
       console.error(err)
@@ -33,5 +32,14 @@ export const useUserStore = defineStore('userStore', () => {
       console.error(err)
     }
   }
-  return { fetchAccDetails, fetchSavedDishes,fetchSavedDishesId }
+  async function toogleLikeReciepe(reciepeId,payload) {
+    console.log(payload);
+    try {
+      let isLiked = await apiCall.put(`reciepe/${reciepeId}`,payload)
+      return isLiked.data
+    } catch (err) {
+      console.error(err)
+    }
+  }
+  return { fetchAccDetails, fetchSavedDishes, fetchSavedDishesId, toogleLikeReciepe }
 })

@@ -13,7 +13,7 @@
       <p class="has-text-link" @click="emits('openReciepe')">View more</p>
       <Icon
         icon="ph:heart-bold"
-        v-if="!emits('likeIndi')"
+        v-if="!isLiked"
         style="height: 2rem; width: 2rem"
         @click="toogleLike()"
       ></Icon>
@@ -30,20 +30,39 @@
 
 <script setup>
 import { Icon } from '@iconify/vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useUserStore } from '../../stores/userStore'
 
 import VueCookies from 'vue-cookies'
 
-const isLiked = ref(false),
-  savedDishes = ref([]),
-  userId = ref(),
-  userStore = useUserStore()
-const emits = defineEmits(['openReciepe','likeIndi'])
+const isLiked = ref(false)
+onMounted(() => {
+  updateLikeStats()
+})
+
+watch(
+  () => props.savedDishesId,
+  () => {
+    updateLikeStats()
+  }
+)
+// const isLiked = computed(() => {
+//   if (props.savedDishesId != null || props.savedDishesId != undefined)
+//     return !props.savedDishesId.includes(props.reciepe._id)
+//   else return false
+// })
+const userStore = useUserStore(),
+  userId = ref(VueCookies.get('id') || null)
+const emits = defineEmits(['openReciepe', 'likeIndi'])
 const props = defineProps({
   reciepe: {
     type: Object,
     required: true
+  },
+  savedDishesId: {
+    type: Array,
+    required: true,
+    default: () => []
   }
 })
 
@@ -52,15 +71,15 @@ function resizeText(text) {
   return text.slice(0, 120)
 }
 
-// onMounted(async() => {
-//   userId.value = VueCookies.get('id')
-//   if(userId.value!=null){
-//     savedDishes.value = await userStore.fetchSavedDishes(userId.value)
-//     console.log(savedDishes.value);
-//   }
-// })
 async function toogleLike() {
-  savedDishes.value = await userStore.fetchSavedDishes(userId.value)
+  await userStore.toogleLikeReciepe(props.reciepe._id, { userId: userId.value })
+  emits('likeIndi',userId.value);
+  updateLikeStats()
+}
+
+function updateLikeStats() {
+  isLiked.value = props.savedDishesId.includes(props.reciepe._id)
+  console.log(isLiked.value)
 }
 </script>
 

@@ -16,6 +16,11 @@
               >
             </li>
             <li class="nav-items py-4">
+              <RouterLink class="nav-links" v-if="token" to="/saved_reciepe"
+                >Save Reciepe</RouterLink
+              >
+            </li>
+            <li class="nav-items py-4">
               <RouterLink v-if="!token" class="nav-links" to="/login">Login</RouterLink>
               <p
                 class="nav-links"

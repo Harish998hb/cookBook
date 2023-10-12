@@ -57,7 +57,8 @@ app.use("/reciepe", receipeRoute);
 // const connection_string =
 // process.env.CONNECTION_STRING;
 // const connection_string = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.iajehm1.mongodb.net/cookbook?retryWrites=true&w=majority`;
-const connection_string = "mongodb+srv://hazerdevops:DevHazerOps1007@cluster0.iajehm1.mongodb.net/cookbook?retryWrites=true&w=majority";
+const connection_string =
+  "mongodb+srv://hazerdevops:DevHazerOps1007@cluster0.iajehm1.mongodb.net/cookbook?retryWrites=true&w=majority";
 mongoose
   .connect(connection_string)
   .then(() => {

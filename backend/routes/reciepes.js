@@ -17,7 +17,7 @@ router.get("/", getDishes); // here the path will become like 3000/reciepe/
 
 router.post("/new", createDish); // here the path will become like 3000/reciepe/new
 
-router.put("/", saveDish); // here the path will become like 3000/reciepe/
+router.put("/:id", saveDish); // here the path will become like 3000/reciepe/
 
 router.get("/saved/:id", getSavedDishes); // here the path will become like 3000/reciepe/saved_ids
 

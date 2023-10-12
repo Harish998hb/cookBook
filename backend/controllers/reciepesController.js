@@ -62,23 +62,25 @@ export const createDish = async (req, res) => {
 
 export const saveDish = async (req, res) => {
   try {
-    const { userId, reciepeId } = req.body;
+    const { userId } = req.body;
+    const { id } = req.params;
+    console.log(req.body);
     const user = await UserModel.findById(userId);
-    const receipe = await ReciepeModel.findById(reciepeId);
+    const receipe = await ReciepeModel.findById(id);
     // Here we are checking whether there the same reciepe is in savedReciepe list
     const ifExists = user.savedReciepe.find(
-      (record) => record._id == reciepeId
+      (record) => record._id == id
     );
     if (!ifExists) {
       user.savedReciepe.push(receipe);
       await user.save();
-      res.json({ "saved reciepes": user.savedReciepe });
+      return res.json(true);
     } else {
       user.savedReciepe = user.savedReciepe.filter(
-        (records) => records._id != reciepeId
+        (records) => records._id != id
       );
       await user.save();
-      res.json({ "saved reciepes": user.savedReciepe });
+      return res.json(false);
     }
   } catch (err) {
     console.error(err);
