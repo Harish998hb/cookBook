@@ -4,11 +4,26 @@ import { UserModel } from "../module/userModule.js";
 // Fetch all the dishes
 
 export const getDishes = async (req, res) => {
-  const reciepes = await ReciepeModel.find({});
+  let { key } = req.query;
+  const reciepes = await ReciepeModel.find({
+    //condition for filtering
+    $or: [
+      { dish_name: { $regex: key, $options: "i" } },
+      { instructions: { $regex: key, $options: "i" } },
+      { ingredients: { $regex: key, $options: "i" } },
+    ],
+  });
+
+  // Above code can also be done by this method by using where , equals method
+  // const reciepes = await ReciepeModel.find()
+  // .where('dish_name').equals(key)
+  // .where('instructions').equals(key).
+  // where('ingredients').equals(key);
+
   if (reciepes) {
     return res.json(reciepes);
   } else {
-    res.json({ msg: "Can,t fetch the Data" });
+    res.json({ msg: "Can't fetch the Data" });
   }
 };
 
@@ -68,9 +83,7 @@ export const saveDish = async (req, res) => {
     const user = await UserModel.findById(userId);
     const receipe = await ReciepeModel.findById(id);
     // Here we are checking whether there the same reciepe is in savedReciepe list
-    const ifExists = user.savedReciepe.find(
-      (record) => record._id == id
-    );
+    const ifExists = user.savedReciepe.find((record) => record._id == id);
     if (!ifExists) {
       user.savedReciepe.push(receipe);
       await user.save();
@@ -93,9 +106,9 @@ export const getSavedDishIds = async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.id);
     // res.json({ savedReciepeIds: user?.savedReciepe });
-    const savedReciepeIds=user.savedReciepe.map((item)=>item._id);
+    const savedReciepeIds = user.savedReciepe.map((item) => item._id);
     console.log(savedReciepeIds);
-    return res.json(savedReciepeIds)
+    return res.json(savedReciepeIds);
   } catch (err) {
     console.error(err);
   }

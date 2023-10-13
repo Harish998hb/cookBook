@@ -5,6 +5,7 @@ import { router as loginRoute } from "./routes/login.js";
 import { router as receipeRoute } from "./routes/reciepes.js";
 import cors from "cors";
 import "dotenv/config.js";
+import xss from "xss-clean";
 
 const app = express();
 // app.use(config());
@@ -47,8 +48,10 @@ app.use(
 
 // app.use(cors());
 
-// route
+// Perventing an XSS attack i.e cleaning any kinda html data into the database by changing the original string
+app.use(xss());
 
+// route
 app.use("/auth", loginRoute);
 
 app.use("/reciepe", receipeRoute);

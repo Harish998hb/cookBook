@@ -11,26 +11,28 @@
     </div>
     <div class="is-flex is-justify-content-space-between is-align-items-center is- mt-3">
       <p class="has-text-link" @click="emits('openReciepe')">View more</p>
-      <Icon
-        icon="ph:heart-bold"
-        v-if="!isLiked"
-        style="height: 2rem; width: 2rem"
-        @click="toogleLike()"
-      ></Icon>
-      <Icon
-        icon="mdi:heart"
-        color="red"
-        v-else
-        style="height: 2rem; width: 2rem"
-        @click="toogleLike()"
-      ></Icon>
+      <div v-if="userId">
+        <Icon
+          icon="ph:heart-bold"
+          v-if="!isLiked"
+          style="height: 2rem; width: 2rem"
+          @click="toogleLike()"
+        ></Icon>
+        <Icon
+          icon="mdi:heart"
+          color="red"
+          v-else
+          style="height: 2rem; width: 2rem"
+          @click="toogleLike()"
+        ></Icon>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { Icon } from '@iconify/vue'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, shallowRef, triggerRef, watch } from 'vue'
 import { useUserStore } from '../../stores/userStore'
 
 import VueCookies from 'vue-cookies'
@@ -72,9 +74,9 @@ function resizeText(text) {
 }
 
 async function toogleLike() {
-  await userStore.toogleLikeReciepe(props.reciepe._id, { userId: userId.value })
-  emits('likeIndi',userId.value);
-  updateLikeStats()
+  let likeStats =await userStore.toogleLikeReciepe(props.reciepe._id, { userId: userId.value })
+  console.log(likeStats,props.savedDishesId);
+  isLiked.value=likeStats
 }
 
 function updateLikeStats() {

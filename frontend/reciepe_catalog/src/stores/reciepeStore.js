@@ -4,9 +4,11 @@ import { shallowRef, triggerRef } from 'vue'
 
 export const useReciepeStore = defineStore('reciepeStore', () => {
   const reciepes = shallowRef([])
-  async function getReciepes() {
+  async function getReciepes(query = false) {
     try {
-      const response = await apiCall.get('reciepe/')
+      const response = query
+        ? await apiCall.get(`reciepe?key=${query}`)
+        : await apiCall.get(`reciepe?key=`)
       reciepes.value = response.data
       triggerRef(reciepes)
       return response.data
@@ -54,7 +56,7 @@ export const useReciepeStore = defineStore('reciepeStore', () => {
   async function createDish(payload) {
     try {
       const response = await apiCall.post('reciepe/new', payload)
-      return response.status;
+      return response.status
     } catch (err) {
       console.error(err)
     }

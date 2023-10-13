@@ -1,6 +1,24 @@
 <template>
   <section class="home-page">
     <div class="container py-5">
+      <div class="search-container is-flex is-justify-content-center is-align-items-center">
+        <div
+          class="bg-color-white is-flex is-justify-content-center is-align-items-center p-4 radius-default"
+        >
+          <h3 class="is-size-4 mr-4"><label for="search-box">Search Recipes</label></h3>
+          <input
+            type="text"
+            class="radius-default p-4 mr-4 is-size-5"
+            name="search-box "
+            id="search-box"
+            placeholder="Search"
+            v-model="searchTerm"
+          />
+          <base-button class="submit-btn bg-color-cl-sec color-white"
+            ><span class="is-size-6" @keydown.enter="searchKey()" @click="searchKey()">Search</span></base-button
+          >
+        </div>
+      </div>
       <h1 class="is-size-3 mt-3">
         {{ 'Welcome ' + username + ',' }}
       </h1>
@@ -31,6 +49,7 @@ import { useReciepeStore } from '../stores/reciepeStore.js'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import BaseButton from '../components/baseComponents/baseButton.vue'
 import VueCookies from 'vue-cookies'
 import ReciepeCard from '../components/reciepe-cards/reciepeCard.vue'
 
@@ -40,6 +59,8 @@ const reciepeStore = useReciepeStore(),
   router = useRouter()
 const reciepes = ref([]),
   username = ref('User'),
+  searchTerm = ref(''),
+  isSearchActive = ref(false),
   savedReciepesIds = ref([])
 
 onMounted(async () => {
@@ -54,8 +75,11 @@ onMounted(async () => {
   // let like=likeNotify();
 })
 
+async function searchKey() {
+  reciepes.value = await reciepeStore.getReciepes(searchTerm.value)
+}
 async function isLiked(userId) {
-  console.log("parent");
+  console.log('parent')
   savedReciepesIds.value = await userStore.fetchSavedDishesId(userId)
 }
 async function fetchData() {
