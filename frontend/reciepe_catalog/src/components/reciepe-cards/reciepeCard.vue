@@ -32,7 +32,7 @@
 
 <script setup>
 import { Icon } from '@iconify/vue'
-import { computed, onMounted, ref, shallowRef, triggerRef, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useUserStore } from '../../stores/userStore'
 
 import VueCookies from 'vue-cookies'
@@ -74,9 +74,9 @@ function resizeText(text) {
 }
 
 async function toogleLike() {
-  let likeStats =await userStore.toogleLikeReciepe(props.reciepe._id, { userId: userId.value })
-  console.log(likeStats,props.savedDishesId);
-  isLiked.value=likeStats
+  let likeStats = await userStore.toogleLikeReciepe(props.reciepe._id, { userId: userId.value })
+  console.log(likeStats, props.savedDishesId)
+  isLiked.value = likeStats
 }
 
 function updateLikeStats() {

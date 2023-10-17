@@ -5,14 +5,18 @@ import { UserModel } from "../module/userModule.js";
 
 export const getDishes = async (req, res) => {
   let { key } = req.query;
-  const reciepes = await ReciepeModel.find({
+  let { pageNo } = req.params;
+  let reciepes = await ReciepeModel.find({
     //condition for filtering
     $or: [
       { dish_name: { $regex: key, $options: "i" } },
       { instructions: { $regex: key, $options: "i" } },
       { ingredients: { $regex: key, $options: "i" } },
     ],
-  });
+  })
+    .skip(pageNo * 6)
+    .limit(6);
+  // const reciepeLen=reciepes.length;
 
   // Above code can also be done by this method by using where , equals method
   // const reciepes = await ReciepeModel.find()
@@ -21,7 +25,10 @@ export const getDishes = async (req, res) => {
   // where('ingredients').equals(key);
 
   if (reciepes) {
-    return res.json(reciepes);
+    return res.json({
+      totalReciepes: reciepes,
+      totalReciepesLen: reciepes.length,
+    });
   } else {
     res.json({ msg: "Can't fetch the Data" });
   }

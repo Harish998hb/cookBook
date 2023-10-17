@@ -4,21 +4,22 @@ import { shallowRef, triggerRef } from 'vue'
 
 export const useReciepeStore = defineStore('reciepeStore', () => {
   const reciepes = shallowRef([])
-  async function getReciepes(query = false) {
+  async function getReciepes(searchTerm = false ,pageNo= 0) {
+    
     try {
-      const response = query
-        ? await apiCall.get(`reciepe?key=${query}`)
-        : await apiCall.get(`reciepe?key=`)
+      const response = searchTerm
+        ? await apiCall.get(`reciepe/${pageNo}?key=${searchTerm}`)
+        : await apiCall.get(`reciepe/${pageNo}?key=`)
       reciepes.value = response.data
       triggerRef(reciepes)
-      return response.data
+      return response.data;
     } catch (err) {
       console.error(err)
     }
   }
   async function getReciepe(param) {
     try {
-      const response = await apiCall.get(`reciepe/${param}`)
+      const response = await apiCall.get(`reciepe/single/${param}`)
       return response.data
     } catch (err) {
       console.error(err)

@@ -13,7 +13,7 @@ import {
 
 export const router = express.Router();
 
-router.get("/", getDishes); // here the path will become like 3000/reciepe/
+router.get("/:pageNo", getDishes); // here the path will become like 3000/reciepe/
 
 // router.get("/search", getDishes); // here the path will become like 3000/reciepe/
 
@@ -27,7 +27,7 @@ router.get("/saved_ids/:id", getSavedDishIds); // here the path will become like
 
 router.get('/:id/chef',getDishChef)
 
-router.get('/:id',getSpecificDish);
+router.get('/single/:id',getSpecificDish);
 
 router.put('/edit/:id/:userId',updateDish);
 

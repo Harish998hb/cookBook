@@ -1,5 +1,5 @@
 <template>
-  <section class="home-page">
+  <section class="home-page" style="min-height: 90vh">
     <div class="container py-5">
       <div class="search-container is-flex is-justify-content-center is-align-items-center">
         <div
@@ -13,9 +13,12 @@
             id="search-box"
             placeholder="Search"
             v-model="searchTerm"
+            @change="searchKey()"
           />
           <base-button class="submit-btn bg-color-cl-sec color-white"
-            ><span class="is-size-6" @keydown.enter="searchKey()" @click="searchKey()">Search</span></base-button
+            ><span class="is-size-6" @keydown.enter="searchKey()" @click="searchKey()"
+              >Search</span
+            ></base-button
           >
         </div>
       </div>
@@ -38,6 +41,18 @@
           </div>
         </template>
       </Suspense>
+      <div class="pages is-flex is-justify-content-center">
+        <div class="is-flex" style="list-style: none">
+          <button
+            class="page-button bg-color-tx-sec radius-small color-white px-4 py-3 mx-3"
+            v-for="(pageNo, i) in pages"
+            :key="i"
+            @click="reqReciepes()"
+          >
+            {{ i + 1 }}
+          </button>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -60,7 +75,8 @@ const reciepeStore = useReciepeStore(),
 const reciepes = ref([]),
   username = ref('User'),
   searchTerm = ref(''),
-  isSearchActive = ref(false),
+  reciepesLen = ref(),
+  pages = ref(),
   savedReciepesIds = ref([])
 
 onMounted(async () => {
@@ -75,15 +91,27 @@ onMounted(async () => {
   // let like=likeNotify();
 })
 
+function reqReciepes() {
+  
+}
+
 async function searchKey() {
-  reciepes.value = await reciepeStore.getReciepes(searchTerm.value)
+  let { totalReciepes, totalReciepesLen } = await reciepeStore.getReciepes(searchTerm.value)
+  reciepes.value = totalReciepes
+  reciepesLen.value = totalReciepesLen
+  // pages.value=Array.from(Array(Math.ceil(reciepesLen.value / 6)))
+  // console.log(reciepesLen.value)
 }
 async function isLiked(userId) {
   console.log('parent')
   savedReciepesIds.value = await userStore.fetchSavedDishesId(userId)
 }
 async function fetchData() {
-  reciepes.value = await reciepeStore.getReciepes()
+  let { totalReciepes, totalReciepesLen } = await reciepeStore.getReciepes()
+  reciepes.value = totalReciepes
+  reciepesLen.value = totalReciepesLen
+  console.log(reciepesLen.value)
+  pages.value = Array.from(Array(Math.ceil(reciepesLen.value / 6)))
 }
 console.log(loginStore.isAuth())
 
