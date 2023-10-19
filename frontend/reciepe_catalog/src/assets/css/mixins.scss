@@ -1,6 +1,6 @@
 $destop-view: 1216px;
 $tablet-view: 768px;
-$mobile-view: 480px;
+$mobile-view: 260px;
 
 @mixin desktop {
   @media (min-width: $destop-view) {

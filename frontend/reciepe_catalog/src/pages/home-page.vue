@@ -3,12 +3,12 @@
     <div class="container py-5">
       <div class="search-container is-flex is-justify-content-center is-align-items-center">
         <div
-          class="bg-color-white is-flex is-justify-content-center is-align-items-center p-4 radius-default"
+          class="search-box bg-color-white is-flex-desktop is-justify-content-center is-align-items-center p-4 radius-default"
         >
           <h3 class="is-size-4 mr-4"><label for="search-box">Search Recipes</label></h3>
           <input
             type="text"
-            class="radius-default p-4 mr-4 is-size-5"
+            class="radius-default p-4 mr-4 is-size-5 my-4"
             name="search-box "
             id="search-box"
             placeholder="Search"
@@ -47,7 +47,7 @@
             class="page-button bg-color-tx-sec radius-small color-white px-4 py-3 mx-3"
             v-for="(pageNo, i) in pages"
             :key="i"
-            @click="reqReciepes()"
+            @click="reqReciepes(i+1)"
           >
             {{ i + 1 }}
           </button>
@@ -91,13 +91,15 @@ onMounted(async () => {
   // let like=likeNotify();
 })
 
-function reqReciepes() {
-  
+async function reqReciepes(pageNo) {
+  let { filteredReciepes, totalReciepesLen } = await reciepeStore.getReciepes(searchTerm.value,pageNo)
+  reciepes.value = filteredReciepes
+  reciepesLen.value = totalReciepesLen
 }
 
 async function searchKey() {
-  let { totalReciepes, totalReciepesLen } = await reciepeStore.getReciepes(searchTerm.value)
-  reciepes.value = totalReciepes
+  let { filteredReciepes, totalReciepesLen } = await reciepeStore.getReciepes(searchTerm.value)
+  reciepes.value = filteredReciepes
   reciepesLen.value = totalReciepesLen
   // pages.value=Array.from(Array(Math.ceil(reciepesLen.value / 6)))
   // console.log(reciepesLen.value)
@@ -107,10 +109,11 @@ async function isLiked(userId) {
   savedReciepesIds.value = await userStore.fetchSavedDishesId(userId)
 }
 async function fetchData() {
-  let { totalReciepes, totalReciepesLen } = await reciepeStore.getReciepes()
-  reciepes.value = totalReciepes
+  let { filteredReciepes, totalReciepesLen } = await reciepeStore.getReciepes()
+  reciepes.value = filteredReciepes
   reciepesLen.value = totalReciepesLen
-  console.log(reciepesLen.value)
+  // console.log(reciepesLen.value)
+
   pages.value = Array.from(Array(Math.ceil(reciepesLen.value / 6)))
 }
 console.log(loginStore.isAuth())
@@ -132,6 +135,11 @@ function openFunc(reciepe) {
   }
   @include desktop {
     width: 32%;
+  }
+}
+.search-box{
+  @include mobile {
+    margin: 0 1rem;
   }
 }
 </style>

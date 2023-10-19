@@ -4,7 +4,7 @@ import { shallowRef, triggerRef } from 'vue'
 
 export const useReciepeStore = defineStore('reciepeStore', () => {
   const reciepes = shallowRef([])
-  async function getReciepes(searchTerm = false ,pageNo= 0) {
+  async function getReciepes(searchTerm = false ,pageNo= 1) {
     
     try {
       const response = searchTerm

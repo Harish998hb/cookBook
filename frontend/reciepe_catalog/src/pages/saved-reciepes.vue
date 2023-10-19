@@ -4,6 +4,7 @@
     <ReciepeCard
       v-for="(reciepe, i) in saved_reciepes"
       :key="i"
+      class="receiepe-card"
       :reciepe="reciepe"
       @click="$router.push({ path: `/reciepe/${reciepe._id}` })"
     ></ReciepeCard>
@@ -26,3 +27,13 @@ onMounted(async () => {
   console.log(saved_reciepes.value)
 })
 </script>
+
+<style lang="scss" scoped>
+@import '../assets/css/mixins.scss';
+
+.receiepe-card{
+  @include mobile{
+    margin: 0 1rem;
+  }
+}
+</style>

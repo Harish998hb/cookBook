@@ -11,6 +11,7 @@
     </div>
     <div class="is-flex is-justify-content-space-between is-align-items-center is- mt-3">
       <p class="has-text-link" @click="emits('openReciepe')">View more</p>
+      <p>{{ reciepe._id }}</p>
       <div v-if="userId">
         <Icon
           icon="ph:heart-bold"
@@ -37,6 +38,18 @@ import { useUserStore } from '../../stores/userStore'
 
 import VueCookies from 'vue-cookies'
 
+const props = defineProps({
+  reciepe: {
+    type: Object,
+    required: true
+  },
+  savedDishesId: {
+    type: Array,
+    required: true,
+    default: () => []
+  }
+})
+
 const isLiked = ref(false)
 onMounted(() => {
   updateLikeStats()
@@ -56,17 +69,6 @@ watch(
 const userStore = useUserStore(),
   userId = ref(VueCookies.get('id') || null)
 const emits = defineEmits(['openReciepe', 'likeIndi'])
-const props = defineProps({
-  reciepe: {
-    type: Object,
-    required: true
-  },
-  savedDishesId: {
-    type: Array,
-    required: true,
-    default: () => []
-  }
-})
 
 // Function for resizing the description
 function resizeText(text) {

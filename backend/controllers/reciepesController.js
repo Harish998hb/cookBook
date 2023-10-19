@@ -5,7 +5,7 @@ import { UserModel } from "../module/userModule.js";
 
 export const getDishes = async (req, res) => {
   let { key } = req.query;
-  let { pageNo } = req.params;
+  let { pageNo } = (req.params);
   let reciepes = await ReciepeModel.find({
     //condition for filtering
     $or: [
@@ -13,9 +13,7 @@ export const getDishes = async (req, res) => {
       { instructions: { $regex: key, $options: "i" } },
       { ingredients: { $regex: key, $options: "i" } },
     ],
-  })
-    .skip(pageNo * 6)
-    .limit(6);
+  });
   // const reciepeLen=reciepes.length;
 
   // Above code can also be done by this method by using where , equals method
@@ -24,9 +22,12 @@ export const getDishes = async (req, res) => {
   // .where('instructions').equals(key).
   // where('ingredients').equals(key);
 
+  let startIndex = (pageNo - 1) * 6,
+    lastIndex = pageNo * 6;
+  let result = reciepes.slice(startIndex, lastIndex);
   if (reciepes) {
     return res.json({
-      totalReciepes: reciepes,
+      filteredReciepes: result,
       totalReciepesLen: reciepes.length,
     });
   } else {
