@@ -11,7 +11,6 @@
     </div>
     <div class="is-flex is-justify-content-space-between is-align-items-center is- mt-3">
       <p class="has-text-link" @click="emits('openReciepe')">View more</p>
-      <p>{{ reciepe._id }}</p>
       <div v-if="userId">
         <Icon
           icon="ph:heart-bold"

@@ -1,16 +1,17 @@
 import express from "express";
 import mongoose from "mongoose";
-import { config } from "dotenv";
+// import dotenv from "dotenv";
+import "dotenv/config.js";
 import { router as loginRoute } from "./routes/login.js";
 import { router as receipeRoute } from "./routes/reciepes.js";
 import cors from "cors";
-import "dotenv/config.js";
 import xss from "xss-clean";
 
 const app = express();
 // app.use(config());
 app.use(express.json());
 
+// dotenv.config()
 // Server connect
 app.listen(3007, () => {
   console.log(`I m listening on ${process.env.PORT}`);
@@ -55,13 +56,13 @@ app.use(xss());
 app.use("/auth", loginRoute);
 
 app.use("/reciepe", receipeRoute);
+
 // Database Connection
-// console.log(process.env.DB_PASS);
-// const connection_string =
-// process.env.CONNECTION_STRING;
-// const connection_string = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.iajehm1.mongodb.net/cookbook?retryWrites=true&w=majority`;
-const connection_string =
-  "mongodb+srv://hazerdevops:DevHazerOps1007@cluster0.iajehm1.mongodb.net/cookbook?retryWrites=true&w=majority";
+
+const username=process.env.DB_USER,
+pass=process.env.DB_PASS;
+const connection_string = `mongodb+srv://${username}:${pass}@cluster0.iajehm1.mongodb.net/cookbook?retryWrites=true&w=majority`;
+
 mongoose
   .connect(connection_string)
   .then(() => {
@@ -70,5 +71,3 @@ mongoose
   .catch((err) => {
     console.error(err);
   });
-
-// console.log(connection_string,process.env.PORT);
