@@ -47,7 +47,7 @@
             class="page-button bg-color-tx-sec radius-small color-white px-4 py-3 mx-3"
             v-for="(pageNo, i) in pages"
             :key="i"
-            @click="reqReciepes(i+1)"
+            @click="reqReciepes(i + 1)"
           >
             {{ i + 1 }}
           </button>
@@ -85,14 +85,17 @@ onMounted(async () => {
   if (userId) {
     let user = await userStore.fetchAccDetails(VueCookies.get('id'))
     username.value = user.username
+    savedReciepesIds.value = await userStore.fetchSavedDishesId(userId)
+    console.log(savedReciepesIds.value)
   }
-  savedReciepesIds.value = await userStore.fetchSavedDishesId(userId)
-  console.log(savedReciepesIds.value)
   // let like=likeNotify();
 })
 
 async function reqReciepes(pageNo) {
-  let { filteredReciepes, totalReciepesLen } = await reciepeStore.getReciepes(searchTerm.value,pageNo)
+  let { filteredReciepes, totalReciepesLen } = await reciepeStore.getReciepes(
+    searchTerm.value,
+    pageNo
+  )
   reciepes.value = filteredReciepes
   reciepesLen.value = totalReciepesLen
 }
@@ -137,7 +140,7 @@ function openFunc(reciepe) {
     width: 32%;
   }
 }
-.search-box{
+.search-box {
   @include mobile {
     margin: 0 1rem;
   }

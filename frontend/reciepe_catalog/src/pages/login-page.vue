@@ -18,7 +18,7 @@
         <input
           class="input is-rounded"
           placeholder="******"
-          type="text"
+          type="password"
           name="password"
           id="password"
           v-model="password"

@@ -76,13 +76,13 @@ function resizeText(text) {
 
 async function toogleLike() {
   let likeStats = await userStore.toogleLikeReciepe(props.reciepe._id, { userId: userId.value })
-  console.log(likeStats, props.savedDishesId)
+  // console.log(likeStats, props.savedDishesId)
   isLiked.value = likeStats
 }
 
 function updateLikeStats() {
   isLiked.value = props.savedDishesId.includes(props.reciepe._id)
-  console.log(isLiked.value)
+  // console.log(isLiked.value)
 }
 </script>
 

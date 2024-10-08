@@ -63,7 +63,6 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = isAuth()
-  console.log(isAuthenticated)
   if (!isAuthenticated && 'auth' in to.meta && to.meta.auth) {
     next('/login')
   } else if (isAuthenticated && 'auth' in to.meta && !to.meta.auth) {
