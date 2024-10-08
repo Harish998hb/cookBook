@@ -62,7 +62,6 @@ async function checkUser() {
   }
 }
 
-console.log(loginStore.isAuth())
 </script>
 
 <style lang="scss" scoped>

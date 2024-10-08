@@ -74,26 +74,20 @@ const id = route.params.id,
 onMounted(async () => {
   reciepe.value = await reciepeStore.getReciepe(id)
   chef_name.value = await fetchChefName()
-  console.log(reciepe.value._id)
-  console.log(userId)
-  console.log(reciepe.value.chef == userId)
 })
-onUnmounted(()=>{
-  localStorage.clear();
+onUnmounted(() => {
+  localStorage.clear()
 })
 async function fetchChefName() {
   return await reciepeStore.getDishChef(id)
 }
-console.log(VueCookies.get('id'))
 
 function editReciepe() {
-  console.log(reciepe.value)
   localStorage.setItem('selectedReciepe', JSON.stringify(reciepe.value))
   router.push({ name: 'create_reciepe' })
 }
 async function deleteReciepe() {
   let delRespose = await reciepeStore.deleteReciepe(reciepe.value._id, userId)
-  console.log(delRespose);
   if (delRespose === 200) {
     Toastify({
       text: 'Your reciepe has been deleted',

@@ -85,11 +85,11 @@ function createUser() {
         username: username.value,
         phn_no: phn.value
       }
-      console.log(payload)
+      // console.log(payload)
       loginStore
         .createUser(payload)
         .then(() => {
-          console.log('created sucessfully')
+          console.log('User created sucessfully')
           router.push({ name: 'login' })
         })
         .catch((err) => {

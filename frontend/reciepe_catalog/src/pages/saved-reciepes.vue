@@ -24,7 +24,7 @@ const saved_reciepes = ref([]),
 
 onMounted(async () => {
   saved_reciepes.value = await userStore.fetchSavedDishes(userId.value)
-  console.log(saved_reciepes.value)
+  // console.log(saved_reciepes.value)
 })
 </script>
 

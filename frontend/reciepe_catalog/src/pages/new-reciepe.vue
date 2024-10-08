@@ -179,7 +179,7 @@ async function createRecipe() {
     if (allEntered) {
       let payload = createPayload()
       let newReciepeResponse = await reciepeStore.createDish(payload)
-      console.log(newReciepeResponse)
+      // console.log(newReciepeResponse)
       if (newReciepeResponse === 200) {
         Toastify({
           text: 'Your Reciepe has been created ',

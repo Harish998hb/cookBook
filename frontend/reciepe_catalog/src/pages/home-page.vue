@@ -108,7 +108,6 @@ async function searchKey() {
   // console.log(reciepesLen.value)
 }
 async function isLiked(userId) {
-  console.log('parent')
   savedReciepesIds.value = await userStore.fetchSavedDishesId(userId)
 }
 async function fetchData() {
@@ -119,7 +118,6 @@ async function fetchData() {
 
   pages.value = Array.from(Array(Math.ceil(reciepesLen.value / 6)))
 }
-console.log(loginStore.isAuth())
 
 function openFunc(reciepe) {
   router.push({ path: `/reciepe/${reciepe._id}` })
